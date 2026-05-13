@@ -11,6 +11,7 @@ import ExperienceForm from "@/components/builder/forms/ExperienceForm";
 import EducationForm from "@/components/builder/forms/EducationForm";
 import ProjectsForm from "@/components/builder/forms/ProjectsForm";
 import SkillsForm from "@/components/builder/forms/SkillsForm";
+import AIReviewPanel from "@/components/builder/AIReviewPanel";
 
 const STEPS = [
   { id: "personal", label: "Personal Info", icon: User },
@@ -72,6 +73,7 @@ export default function BuilderPage() {
             </div>
           </div>
 
+          <AIReviewPanel />
         </div>
       </aside>
 

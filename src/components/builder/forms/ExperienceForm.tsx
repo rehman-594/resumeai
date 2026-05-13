@@ -1,12 +1,43 @@
 "use client";
 
+import { useState } from "react";
 import { useResumeStore, Experience } from "@/store/useResumeStore";
-import { Plus, Trash2, Briefcase, Building2, Calendar, FileText } from "lucide-react";
+import { Plus, Trash2, Briefcase, Building2, Calendar, FileText, Sparkles } from "lucide-react";
 
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function ExperienceForm() {
   const { data, updateData } = useResumeStore();
+  const [generatingId, setGeneratingId] = useState<string | null>(null);
+
+  const handleEnhanceDescription = async (exp: Experience) => {
+    if (!exp.position || !exp.company) {
+      alert("Please enter Job Title and Company Name first to generate a good description.");
+      return;
+    }
+    setGeneratingId(exp.id);
+    try {
+      const response = await fetch("/api/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "enhance_experience",
+          data: exp,
+        }),
+      });
+      const result = await response.json();
+      if (result.text) {
+        handleUpdate(exp.id, "description", result.text.trim());
+      } else if (result.error) {
+        alert(result.error);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Failed to enhance description");
+    } finally {
+      setGeneratingId(null);
+    }
+  };
 
   const handleAdd = () => {
     const newExp: Experience = {
@@ -139,10 +170,21 @@ export default function ExperienceForm() {
                   </div>
 
                   <div className="space-y-2.5 md:col-span-2">
-                    <label className="flex items-center gap-2 text-sm font-medium text-zinc-400">
-                      <FileText className="w-4 h-4 text-amber-400" />
-                      Description
-                    </label>
+                    <div className="flex items-center justify-between">
+                      <label className="flex items-center gap-2 text-sm font-medium text-zinc-400">
+                        <FileText className="w-4 h-4 text-amber-400" />
+                        Description
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => handleEnhanceDescription(exp)}
+                        disabled={generatingId === exp.id}
+                        className="flex items-center gap-2 text-xs bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 px-3 py-1.5 rounded-lg border border-amber-500/20 transition-colors disabled:opacity-50"
+                      >
+                        <Sparkles className="w-3 h-3" />
+                        {generatingId === exp.id ? "Enhancing..." : "AI Enhance"}
+                      </button>
+                    </div>
                     <textarea
                       value={exp.description}
                       onChange={(e) => handleUpdate(exp.id, "description", e.target.value)}

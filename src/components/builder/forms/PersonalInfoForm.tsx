@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { useResumeStore } from "@/store/useResumeStore";
-import { User, Mail, Phone, MapPin, Globe, FileText, UserCircle } from "lucide-react";
+import { User, Mail, Phone, MapPin, Globe, FileText, UserCircle, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function PersonalInfoForm() {
@@ -9,6 +10,33 @@ export default function PersonalInfoForm() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     updatePersonalInfo({ [e.target.name]: e.target.value });
+  };
+
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const handleGenerateSummary = async () => {
+    setIsGenerating(true);
+    try {
+      const response = await fetch("/api/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "generate_summary",
+          data: data.personalInfo,
+        }),
+      });
+      const result = await response.json();
+      if (result.text) {
+        updatePersonalInfo({ summary: result.text.trim() });
+      } else if (result.error) {
+        alert(result.error);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Failed to generate summary");
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   return (
@@ -100,10 +128,21 @@ export default function PersonalInfoForm() {
           </div>
 
           <div className="space-y-2.5 md:col-span-2">
-            <label className="flex items-center gap-2 text-sm font-medium text-zinc-400">
-              <FileText className="w-4 h-4 text-amber-400" />
-              Professional Summary
-            </label>
+            <div className="flex items-center justify-between">
+              <label className="flex items-center gap-2 text-sm font-medium text-zinc-400">
+                <FileText className="w-4 h-4 text-amber-400" />
+                Professional Summary
+              </label>
+              <button
+                type="button"
+                onClick={handleGenerateSummary}
+                disabled={isGenerating}
+                className="flex items-center gap-2 text-xs bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 px-3 py-1.5 rounded-lg border border-amber-500/20 transition-colors disabled:opacity-50"
+              >
+                <Sparkles className="w-3 h-3" />
+                {isGenerating ? "Generating..." : "AI Generate"}
+              </button>
+            </div>
             <textarea
               name="summary"
               value={data.personalInfo.summary}
