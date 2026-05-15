@@ -1,13 +1,15 @@
 "use client";
 
-import { useResumeStore } from "@/store/useResumeStore";
+import { useResumeStore, ResumeData } from "@/store/useResumeStore";
 
 interface ResumePreviewProps {
   template?: string;
+  previewData?: ResumeData;
 }
 
-export default function ResumePreview({ template = "classic" }: ResumePreviewProps) {
-  const { data } = useResumeStore();
+export default function ResumePreview({ template = "classic", previewData }: ResumePreviewProps) {
+  const { data: storeData } = useResumeStore();
+  const data = previewData || storeData;
   const { personalInfo, experience, education, projects, skills, certifications, achievements } = data;
 
   if (template === "aesthetic") {
@@ -37,9 +39,9 @@ export default function ResumePreview({ template = "classic" }: ResumePreviewPro
             <div className="space-y-6">
               {experience.map((exp) => (
                 <div key={exp.id} className="relative pl-6 before:absolute before:left-0 before:top-2 before:w-2 before:h-2 before:bg-emerald-300 before:rounded-full">
-                  <div className="flex justify-between items-baseline mb-1">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-1 gap-1 sm:gap-0">
                     <h3 className="font-semibold text-zinc-800 text-base">{exp.position}</h3>
-                    <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
+                    <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full w-fit">
                       {exp.startDate} {exp.endDate && `— ${exp.endDate}`}
                     </span>
                   </div>
@@ -74,9 +76,9 @@ export default function ResumePreview({ template = "classic" }: ResumePreviewPro
             <div className="space-y-4">
               {education.map((edu) => (
                 <div key={edu.id} className="relative pl-6 before:absolute before:left-0 before:top-2 before:w-2 before:h-2 before:bg-emerald-300 before:rounded-full">
-                  <div className="flex justify-between items-baseline mb-1">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-1 gap-1 sm:gap-0">
                     <h3 className="font-semibold text-zinc-800">{edu.degree}</h3>
-                    <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
+                    <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full w-fit">
                       {edu.startDate} {edu.endDate && `— ${edu.endDate}`}
                     </span>
                   </div>
@@ -104,9 +106,9 @@ export default function ResumePreview({ template = "classic" }: ResumePreviewPro
 
   if (template === "professional") {
     return (
-      <div className="font-sans text-[10pt] leading-snug flex min-h-[297mm] -m-10" style={{ color: '#1e293b' }}>
+      <div className="font-sans text-[10pt] leading-snug flex flex-col sm:flex-row min-h-[297mm] sm:-m-10" style={{ color: '#1e293b' }}>
         {/* Left Column (Dark) */}
-        <div className="w-[30%] bg-slate-800 text-slate-300 p-8 flex flex-col gap-8 shrink-0">
+        <div className="w-full sm:w-[30%] bg-slate-800 text-slate-300 p-6 sm:p-8 flex flex-col gap-8 shrink-0">
           <div>
             <h1 className="text-3xl font-bold text-white mb-2 leading-tight">
               {personalInfo.fullName || "Your Name"}
@@ -146,7 +148,7 @@ export default function ResumePreview({ template = "classic" }: ResumePreviewPro
         </div>
 
         {/* Right Column (Light) */}
-        <div className="w-[70%] bg-white p-8">
+        <div className="w-full sm:w-[70%] bg-white p-6 sm:p-8">
           {personalInfo.summary && (
             <div className="mb-8">
               <h2 className="text-sm font-bold text-slate-800 uppercase tracking-widest border-b-2 border-slate-200 pb-2 mb-3">Professional Summary</h2>
@@ -160,7 +162,7 @@ export default function ResumePreview({ template = "classic" }: ResumePreviewPro
               <div className="space-y-5">
                 {experience.map((exp) => (
                   <div key={exp.id}>
-                    <div className="flex justify-between items-baseline mb-1">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-1 gap-1 sm:gap-0">
                       <h3 className="font-bold text-slate-800 text-base">{exp.position}</h3>
                       <span className="text-xs font-semibold text-slate-500">
                         {exp.startDate} {exp.endDate && `— ${exp.endDate}`}
@@ -197,7 +199,7 @@ export default function ResumePreview({ template = "classic" }: ResumePreviewPro
               <div className="space-y-4">
                 {education.map((edu) => (
                   <div key={edu.id}>
-                    <div className="flex justify-between items-baseline mb-1">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-1 gap-1 sm:gap-0">
                       <h3 className="font-bold text-slate-800">{edu.degree}</h3>
                       <span className="text-xs font-semibold text-slate-500">
                         {edu.startDate} {edu.endDate && `— ${edu.endDate}`}
@@ -231,8 +233,8 @@ export default function ResumePreview({ template = "classic" }: ResumePreviewPro
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-8">
-          <div className="col-span-2 space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+          <div className="col-span-1 sm:col-span-2 space-y-6">
             {/* Summary */}
             {personalInfo.summary && (
               <div>
@@ -249,7 +251,7 @@ export default function ResumePreview({ template = "classic" }: ResumePreviewPro
                   {experience.map((exp) => (
                     <div key={exp.id}>
                       <h3 className="font-bold text-gray-900 text-base">{exp.position}</h3>
-                      <div className="flex justify-between items-center text-sm font-medium text-gray-600 mb-1">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center text-sm font-medium text-gray-600 mb-1 gap-1 sm:gap-0">
                         <span>{exp.company}</span>
                         <span>{exp.startDate} {exp.endDate && `- ${exp.endDate}`}</span>
                       </div>
@@ -354,11 +356,11 @@ export default function ResumePreview({ template = "classic" }: ResumePreviewPro
             <h2 className="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-4">Experience</h2>
             <div className="space-y-5">
               {experience.map((exp) => (
-                <div key={exp.id} className="grid grid-cols-4 gap-4">
-                  <div className="col-span-1 text-sm text-zinc-500 pt-1">
+                <div key={exp.id} className="grid grid-cols-1 sm:grid-cols-4 gap-2 sm:gap-4">
+                  <div className="col-span-1 text-sm text-zinc-500 sm:pt-1">
                     {exp.startDate} — {exp.endDate || "Present"}
                   </div>
-                  <div className="col-span-3">
+                  <div className="col-span-1 sm:col-span-3">
                     <h3 className="font-semibold text-black">{exp.position}</h3>
                     <div className="text-zinc-600 mb-1">{exp.company}</div>
                     <p className="text-zinc-700 whitespace-pre-wrap">{exp.description}</p>
@@ -374,9 +376,9 @@ export default function ResumePreview({ template = "classic" }: ResumePreviewPro
             <h2 className="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-4">Projects</h2>
             <div className="space-y-5">
               {projects.map((proj) => (
-                <div key={proj.id} className="grid grid-cols-4 gap-4">
-                  <div className="col-span-1"></div>
-                  <div className="col-span-3">
+                <div key={proj.id} className="grid grid-cols-1 sm:grid-cols-4 gap-2 sm:gap-4">
+                  <div className="hidden sm:block col-span-1"></div>
+                  <div className="col-span-1 sm:col-span-3">
                     <h3 className="font-semibold text-black">
                       {proj.title}
                       {proj.link && <span className="text-sm font-normal text-zinc-500 ml-2">({proj.link})</span>}
@@ -394,11 +396,11 @@ export default function ResumePreview({ template = "classic" }: ResumePreviewPro
             <h2 className="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-4">Education</h2>
             <div className="space-y-4">
               {education.map((edu) => (
-                <div key={edu.id} className="grid grid-cols-4 gap-4">
-                  <div className="col-span-1 text-sm text-zinc-500 pt-1">
+                <div key={edu.id} className="grid grid-cols-1 sm:grid-cols-4 gap-2 sm:gap-4">
+                  <div className="col-span-1 text-sm text-zinc-500 sm:pt-1">
                     {edu.startDate} — {edu.endDate || "Present"}
                   </div>
-                  <div className="col-span-3">
+                  <div className="col-span-1 sm:col-span-3">
                     <h3 className="font-semibold text-black">{edu.school}</h3>
                     <div className="text-zinc-700">{edu.degree}</div>
                     {edu.description && <p className="text-zinc-600 mt-1">{edu.description}</p>}
@@ -412,9 +414,9 @@ export default function ResumePreview({ template = "classic" }: ResumePreviewPro
         {(skills || certifications || achievements) && (
           <div>
             <h2 className="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-4">Other Info</h2>
-            <div className="grid grid-cols-4 gap-4">
-              <div className="col-span-1"></div>
-              <div className="col-span-3 space-y-2">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 sm:gap-4">
+              <div className="hidden sm:block col-span-1"></div>
+              <div className="col-span-1 sm:col-span-3 space-y-2">
                 {skills && <div><strong className="font-medium text-black">Skills:</strong> <span className="text-zinc-700">{skills}</span></div>}
                 {certifications && <div><strong className="font-medium text-black">Certifications:</strong> <span className="text-zinc-700">{certifications}</span></div>}
                 {achievements && <div><strong className="font-medium text-black">Achievements:</strong> <span className="text-zinc-700">{achievements}</span></div>}
@@ -456,7 +458,7 @@ export default function ResumePreview({ template = "classic" }: ResumePreviewPro
           <div className="space-y-4">
             {experience.map((exp) => (
               <div key={exp.id}>
-                <div className="flex justify-between items-baseline font-bold">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline font-bold gap-1 sm:gap-0">
                   <span>{exp.position}</span>
                   <span className="text-xs font-normal">
                     {exp.startDate} {exp.endDate && `- ${exp.endDate}`}
@@ -495,7 +497,7 @@ export default function ResumePreview({ template = "classic" }: ResumePreviewPro
           <div className="space-y-3">
             {education.map((edu) => (
               <div key={edu.id}>
-                <div className="flex justify-between items-baseline font-bold">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline font-bold gap-1 sm:gap-0">
                   <span>{edu.school}</span>
                   <span className="text-xs font-normal">
                     {edu.startDate} {edu.endDate && `- ${edu.endDate}`}

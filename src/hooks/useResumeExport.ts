@@ -11,9 +11,11 @@ export function useResumeExport(resumeRef: RefObject<HTMLDivElement | null>) {
     iframe.style.position = 'fixed';
     iframe.style.right = '0';
     iframe.style.bottom = '0';
-    iframe.style.width = '0';
-    iframe.style.height = '0';
+    iframe.style.width = '1000px';
+    iframe.style.height = '1000px';
     iframe.style.border = '0';
+    iframe.style.opacity = '0'; // Hide it visually
+    iframe.style.pointerEvents = 'none';
     document.body.appendChild(iframe);
 
     const resumeContent = resumeRef.current.innerHTML;

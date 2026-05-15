@@ -108,11 +108,8 @@ export default function TemplatesTab({ selectedTemplate, onSelect }: TemplatesTa
                   <div className="w-[250%] h-[250%] bg-white rounded-xl shadow-2xl">
                      {/* We use a separate context for the preview if needed, but here we just render it with dummy data */}
                      {/* Note: ResumePreview usually reads from store, so we might need a version that accepts data as prop */}
-                     <div className="p-8">
-                        <div className="h-4 w-32 bg-zinc-200 mb-4"></div>
-                        <div className="h-2 w-full bg-zinc-100 mb-2"></div>
-                        <div className="h-2 w-full bg-zinc-100 mb-2"></div>
-                        <div className="h-2 w-2/3 bg-zinc-100"></div>
+                     <div className="w-full h-full p-8 overflow-hidden">
+                        <ResumePreview template={tmpl.id} previewData={DUMMY_DATA} />
                      </div>
                   </div>
                </div>

@@ -26,16 +26,8 @@ export default function PreviewTab({ selectedTemplate, setSelectedTemplate, onEd
       <div className="flex-1 space-y-6">
         <div className="flex items-center justify-between px-4 py-2 bg-zinc-900/50 border border-zinc-800 rounded-2xl backdrop-blur-xl">
            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1.5 bg-zinc-950 p-1 rounded-lg border border-zinc-800">
-                 <button className="p-2 hover:bg-zinc-800 rounded-md transition-colors text-zinc-400 hover:text-white">
-                    <Smartphone className="w-4 h-4" />
-                 </button>
-                 <button className="p-2 bg-zinc-800 rounded-md transition-colors text-purple-400">
-                    <Monitor className="w-4 h-4" />
-                 </button>
-              </div>
-              <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest">
-                 Live Preview Mode
+              <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest px-2">
+                 Live Preview
               </span>
            </div>
            
