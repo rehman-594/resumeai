@@ -189,7 +189,7 @@ export async function POST(req: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "openai/gpt-oss-120b:free",
+        model: "openrouter/free",
         temperature: 0.1,
         top_p: 0.9,
         messages: [
